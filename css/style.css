@@ -1,5 +1,4 @@
-
-        :root {
+ :root {
             --curve-premium: cubic-bezier(0.16, 1, 0.3, 1);
             --slate-900: #0f172a;
         }
@@ -11,6 +10,8 @@
             height: 100vh;
             height: 100dvh;
             -webkit-font-smoothing: antialiased;
+            /* 强制禁止双击缩放 */
+            touch-action: manipulation;
         }
         
         /* 极致玻璃材质 */
@@ -34,14 +35,12 @@
         .chat-container::-webkit-scrollbar { width: 3px; }
         .chat-container::-webkit-scrollbar-thumb { background: rgba(203, 213, 225, 0.8); border-radius: 10px; }
         
-        /* 沉浸式入场动画 */
         .fade-in { animation: fadeInFull 0.9s var(--curve-premium) forwards; }
         @keyframes fadeInFull { 
             from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(10px); } 
             to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } 
         }
         
-        /* 历史记录 - 丝滑动态交互 */
         .history-item { 
             transition: all 0.5s var(--curve-premium); 
             border-left: 4px solid transparent; 
@@ -57,10 +56,12 @@
             box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); 
         }
         
-        .delete-btn { opacity: 1; md:opacity: 0; transition: all 0.3s var(--curve-premium); }
-        .history-item:hover .delete-btn { opacity: 1; transform: scale(1.1); }
+        .delete-btn { opacity: 1; transition: all 0.3s var(--curve-premium); }
+        @media (min-width: 768px) {
+            .delete-btn { opacity: 0; }
+            .history-item:hover .delete-btn { opacity: 1; transform: scale(1.1); }
+        }
         
-        /* 状态呼吸灯效 */
         .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-flex; position: relative; flex-shrink: 0; z-index: 10; align-items: center; justify-content: center; }
         .status-dot::after { 
             content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; 
@@ -69,12 +70,11 @@
         }
         @keyframes glow { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(2.2); opacity: 0; } }
         
-        /* 高端行政输入框 */
         .executive-input {
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(226, 232, 240, 0.9);
             transition: all 0.5s var(--curve-premium);
-            -webkit-appearance: none;
+        
         }
         .executive-input:focus {
             background: #ffffff;
@@ -84,7 +84,6 @@
             outline: none;
         }
 
-        /* 沉稳动感按钮 */
         .executive-btn {
             background: var(--slate-900);
             color: #ffffff;
@@ -107,10 +106,8 @@
             transition: opacity 0.6s var(--curve-premium);
         }
         
-        /* 消息入场精细动画 */
         .msg-enter { animation: msgSlideUp 0.6s var(--curve-premium) forwards; }
         @keyframes msgSlideUp {
             from { opacity: 0; transform: translateY(24px) scale(0.97); filter: blur(5px); }
             to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
-   
