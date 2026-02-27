@@ -17,7 +17,7 @@ const DIFY_API_KEY = "app-FIpRN8ln822KtJ3k0Gb3578M";
 const DIFY_API_URL = "https://567809b6.r31.cpolar.top/v1";
 const USERS = { abee: "123456", guest: "888888" };
 const OPENING_STATEMENT =
-  "你好！我是你的倾听艺术助手。很高兴能陪你一起开启这段关于书籍的反思之旅。";
+  "你好！我是你的书籍掌握助手。很高兴能陪你一起开启这段关于书籍的反思之旅。";
 
 let currentUser = "";
 let conversationId = "";
@@ -50,29 +50,32 @@ function setStatus(text, colorClass) {
 // ================= 核心逻辑 =================
 
 async function handleLogin() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-  if (USERS[user] && USERS[user] === pass) {
-    currentUser = user;
-    const loginSec = document.getElementById("login-section");
-    loginSec.style.opacity = "0";
-    loginSec.style.transform = "translateY(-40px) scale(0.96)";
-    loginSec.style.filter = "blur(15px)";
-    setTimeout(() => {
-      loginSec.classList.add("hidden");
-      document.getElementById("chat-section").classList.remove("hidden");
-      document.getElementById("user-name-label").innerText = currentUser;
-      document.getElementById("user-avatar").innerText = currentUser
-        .substring(0, 1)
-        .toUpperCase();
-      fetchHistory();
-      showOpeningMessage();
-    }, 800);
-  } else {
-    const err = document.getElementById("login-error");
-    err.classList.remove("hidden");
-    setTimeout(() => err.classList.add("hidden"), 3000);
-  }
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (USERS[user] && USERS[user] === pass) {
+        // --- 新增：仅在移动端（屏幕宽度小于768px）尝试进入全屏 ---
+        if (window.innerWidth < 768) {
+            try { enterFullscreen(); } catch(e) {}
+        }
+        
+        currentUser = user;
+        const loginSec = document.getElementById('login-section');
+        loginSec.style.opacity = '0';
+        loginSec.style.transform = 'translateY(-40px) scale(0.96)';
+        loginSec.style.filter = 'blur(15px)';
+        setTimeout(() => {
+            loginSec.classList.add('hidden');
+            document.getElementById('chat-section').classList.remove('hidden');
+            document.getElementById('user-name-label').innerText = currentUser;
+            document.getElementById('user-avatar').innerText = currentUser.substring(0,1).toUpperCase();
+            fetchHistory();
+            showOpeningMessage();
+        }, 800);
+    } else {
+        const err = document.getElementById('login-error');
+        err.classList.remove('hidden');
+        setTimeout(() => err.classList.add('hidden'), 3000);
+    }
 }
 
 function handleLogout() {
@@ -350,4 +353,16 @@ function scrollChat() {
   if (chatBox) {
     chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
   }
+}
+function enterFullscreen() {
+    const docElm = document.documentElement;
+    if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+    } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+    } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+    } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+    }
 }
