@@ -1,85 +1,158 @@
- :root {
-            --curve-premium: cubic-bezier(0.16, 1, 0.3, 1);
+        :root {
+            --curve-premium: cubic-bezier(0.19, 1, 0.22, 1);
+            /* 更具张力的缓动曲线 */
             --slate-900: #0f172a;
         }
-        body { 
-            font-family: 'Noto Sans SC', sans-serif; 
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
-            color: #1e293b; 
+
+        /* 1. 升级视觉底层：动态网格渐变与深度透视 */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(210, 40%, 96%, 1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(220, 30%, 94%, 1) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, hsla(215, 20%, 92%, 1) 0px, transparent 50%);
+            color: #1e293b;
             overflow: hidden;
             height: 100vh;
             height: 100dvh;
             -webkit-font-smoothing: antialiased;
-            /* 强制禁止双击缩放 */
             touch-action: manipulation;
+            perspective: 1200px;
+            /* 为立体动画提供透视深度 */
         }
-        
-        /* 极致玻璃材质 */
-        .premium-glass { 
-            background: rgba(255, 255, 255, 0.72); 
-            backdrop-filter: blur(40px) saturate(170%); 
-            -webkit-backdrop-filter: blur(40px) saturate(170%);
-            border: 1px solid rgba(255, 255, 255, 0.8); 
-            box-shadow: 
-                0 30px 60px -12px rgba(0,0,0,0.04), 
-                0 18px 36px -18px rgba(0,0,0,0.06),
-                inset 0 0 40px rgba(255,255,255,0.4);
+
+        /* 2. 强化玻璃材质：多层立体阴影与高光边缘 */
+        .premium-glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(50px) saturate(180%);
+            -webkit-backdrop-filter: blur(50px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 40px 100px -20px rgba(0, 0, 0, 0.08),
+                0 20px 40px -15px rgba(0, 0, 0, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            /* 内侧高光提升边缘感 */
         }
-        
-        .sidebar-premium { 
-            background: rgba(255, 255, 255, 0.5); 
-            border-right: 1px solid rgba(226, 232, 240, 0.8); 
+
+        .sidebar-premium {
+            background: rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
             transition: transform 0.6s var(--curve-premium);
         }
 
-        .chat-container::-webkit-scrollbar { width: 3px; }
-        .chat-container::-webkit-scrollbar-thumb { background: rgba(203, 213, 225, 0.8); border-radius: 10px; }
-        
-        .fade-in { animation: fadeInFull 0.9s var(--curve-premium) forwards; }
-        @keyframes fadeInFull { 
-            from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(10px); } 
-            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } 
+        .chat-container::-webkit-scrollbar {
+            width: 3px;
         }
-        
-        .history-item { 
-            transition: all 0.5s var(--curve-premium); 
-            border-left: 4px solid transparent; 
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(203, 213, 225, 0.8);
+            border-radius: 10px;
         }
-        .history-item:hover { 
-            background: rgba(255, 255, 255, 0.95); 
-            transform: translateX(8px); 
-            box-shadow: 0 12px 24px -10px rgba(0,0,0,0.04);
+
+        .fade-in {
+            animation: fadeInFull 0.9s var(--curve-premium) forwards;
         }
-        .history-item.active { 
-            background: #ffffff; 
-            border-left-color: var(--slate-900); 
-            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); 
+
+        @keyframes fadeInFull {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
-        
-        .delete-btn { opacity: 1; transition: all 0.3s var(--curve-premium); }
+
+        .history-item {
+            transition: all 0.5s var(--curve-premium);
+            border-left: 4px solid transparent;
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(8px);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.04);
+        }
+
+        .history-item.active {
+            background: #ffffff;
+            border-left-color: var(--slate-900);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+
+        .delete-btn {
+            opacity: 1;
+            transition: all 0.3s var(--curve-premium);
+        }
+
         @media (min-width: 768px) {
-            .delete-btn { opacity: 0; }
-            .history-item:hover .delete-btn { opacity: 1; transform: scale(1.1); }
+            .delete-btn {
+                opacity: 0;
+            }
+
+            .history-item:hover .delete-btn {
+                opacity: 1;
+                transform: scale(1.1);
+            }
         }
-        
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-flex; position: relative; flex-shrink: 0; z-index: 10; align-items: center; justify-content: center; }
-        .status-dot::after { 
-            content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; 
-            background: inherit; opacity: 0.4; animation: glow 3s infinite var(--curve-premium); 
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-flex;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            opacity: 0.4;
+            animation: glow 3s infinite var(--curve-premium);
             pointer-events: none;
         }
-        @keyframes glow { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(2.2); opacity: 0; } }
-        
-        .executive-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            transition: all 0.5s var(--curve-premium);
-        
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scale(2.2);
+                opacity: 0;
+            }
         }
+/* 3. 动态交互：3D 悬浮效果 */
+.executive-btn {
+    background: var(--slate-900);
+    color: #ffffff;
+    transition: all 0.6s var(--curve-premium);
+    box-shadow: 0 15px 35px -12px rgba(15, 23, 42, 0.4);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
         .executive-input:focus {
             background: #ffffff;
             border-color: #94a3b8;
-            box-shadow: 0 12px 30px -10px rgba(0,0,0,0.04);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
             transform: translateY(-2px);
             outline: none;
         }
@@ -92,22 +165,53 @@
             position: relative;
             overflow: hidden;
         }
-        .executive-btn:hover {
-            background: #1e293b;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.4);
-        }
-        .executive-btn:active { transform: translateY(0) scale(0.96); }
 
+      .executive-btn:hover {
+    background: #1e293b;
+    transform: translateY(-4px) scale(1.03) translateZ(10px); /* 真正的 3D 浮动 */
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.5);
+}
+
+
+.executive-btn:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.3);
+}
         #sidebar-overlay {
             background: rgba(15, 23, 42, 0.2);
             backdrop-filter: blur(15px);
             display: none;
             transition: opacity 0.6s var(--curve-premium);
         }
-        
-        .msg-enter { animation: msgSlideUp 0.6s var(--curve-premium) forwards; }
+
+      /* 4. 气泡与列表的动态进场 */
+.msg-enter { 
+    animation: premiumSlideUp 0.8s var(--curve-premium) forwards; 
+}
+
+
         @keyframes msgSlideUp {
-            from { opacity: 0; transform: translateY(24px) scale(0.97); filter: blur(5px); }
-            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.97);
+                filter: blur(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
         }
+        @keyframes premiumSlideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(40px) scale(0.95) rotateX(-10deg); 
+        filter: blur(15px); 
+    } 
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1) rotateX(0deg); 
+        filter: blur(0); 
+    } 
+}

@@ -17,7 +17,7 @@ const DIFY_API_KEY = "app-FIpRN8ln822KtJ3k0Gb3578M";
 const DIFY_API_URL = "https://567809b6.r31.cpolar.top/v1";
 const USERS = { abee: "123456", guest: "888888" };
 const OPENING_STATEMENT =
-  "你好！我是你的书籍掌握助手。很高兴能陪你一起开启这段关于书籍的反思之旅。";
+  "你好！我是你的书籍掌握助手。很高兴能陪你一起开启这段读书之旅。";
 
 let currentUser = "";
 let conversationId = "";
@@ -52,10 +52,15 @@ function setStatus(text, colorClass) {
 async function handleLogin() {
     const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value.trim();
+    
     if (USERS[user] && USERS[user] === pass) {
-        // --- 新增：仅在移动端（屏幕宽度小于768px）尝试进入全屏 ---
+        // --- 核心修改：仅在移动端（宽度 < 768px）尝试进入全屏 ---
         if (window.innerWidth < 768) {
-            try { enterFullscreen(); } catch(e) {}
+            try { 
+                enterFullscreen(); 
+            } catch(e) {
+                console.log("全屏请求未能成功执行");
+            }
         }
         
         currentUser = user;
@@ -63,6 +68,7 @@ async function handleLogin() {
         loginSec.style.opacity = '0';
         loginSec.style.transform = 'translateY(-40px) scale(0.96)';
         loginSec.style.filter = 'blur(15px)';
+        
         setTimeout(() => {
             loginSec.classList.add('hidden');
             document.getElementById('chat-section').classList.remove('hidden');
@@ -77,6 +83,7 @@ async function handleLogin() {
         setTimeout(() => err.classList.add('hidden'), 3000);
     }
 }
+
 
 function handleLogout() {
   currentUser = "";
@@ -296,16 +303,13 @@ function createAiMessagePlaceholder() {
   const outer = document.createElement("div");
   outer.className = "w-full flex justify-start msg-enter";
   const inner = document.createElement("div");
-  // 响应式拓宽：max-w-2xl lg:max-w-5xl
-  inner.className =
-    "max-w-2xl lg:max-w-5xl w-full mx-auto flex gap-5 md:gap-10 items-start";
+  inner.className = "max-w-2xl lg:max-w-5xl w-full mx-auto flex gap-5 md:gap-10 items-start";
   const avatar = document.createElement("div");
   avatar.className = `w-11 h-11 md:w-14 md:h-14 rounded-[1.6rem] flex-shrink-0 flex items-center justify-center text-[10px] font-black bg-white text-slate-900 border border-slate-100 shadow-sm`;
   avatar.innerText = "AI";
   const content = document.createElement("div");
-  // 气泡占宽比例优化
-  content.className =
-    "bg-white text-slate-800 p-6 md:p-10 rounded-[3rem] rounded-tl-xl border border-slate-50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight";
+  // 关键修改：将 p-6 md:p-10 改为 px-6 py-4 md:px-10 md:py-6 (显著降低垂直高度)
+  content.className = "bg-white text-slate-800 px-6 py-4 md:px-10 md:py-6 rounded-[2.5rem] rounded-tl-lg border border-slate-50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight";
   content.innerText = "...";
   inner.appendChild(avatar);
   inner.appendChild(content);
@@ -321,24 +325,21 @@ function appendMessage(role, text) {
   const outer = document.createElement("div");
   outer.className = `w-full flex ${role === "user" ? "justify-end" : "justify-start"} msg-enter`;
   const inner = document.createElement("div");
-  // 响应式拓宽：max-w-2xl lg:max-w-5xl
   inner.className = `max-w-2xl lg:max-w-5xl w-full mx-auto flex gap-5 md:gap-10 items-start ${role === "user" ? "flex-row-reverse" : ""}`;
   const avatar = document.createElement("div");
   if (role === "user") {
-    avatar.className = `w-11 h-11 md:w-14 md:h-14 rounded-[1.6rem] flex-shrink-0 flex items-center justify-center text-[10px] font-black bg-slate-900 text-white shadow-2xl shadow-slate-900/30`;
+    avatar.className = `w-11 h-11 md:w-14 md:h-14 rounded-[1.6rem] flex-shrink-0 flex items-center justify-center text-[10px] font-black bg-slate-900 text-white shadow-[0_20px_40px_-10px_rgba(15,23,42,0.5)] border border-white/20`;
     avatar.innerText = "我";
   } else {
-    avatar.className = `w-11 h-11 md:w-14 md:h-14 rounded-[1.6rem] flex-shrink-0 flex items-center justify-center text-[10px] font-black bg-white text-slate-900 border border-slate-100 shadow-sm`;
+    avatar.className = `w-11 h-11 md:w-14 md:h-14 rounded-[1.6rem] flex-shrink-0 flex items-center justify-center text-[10px] font-black bg-white text-slate-900 border border-slate-100 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.05)]`;
     avatar.innerText = "AI";
   }
   const content = document.createElement("div");
-  // 气泡占宽比例优化
+  // 关键修改：将 p-6 md:p-10 改为 px-6 py-4 md:px-10 md:py-6 (显著降低垂直高度)
   if (role === "user") {
-    content.className =
-      "bg-slate-900 text-white p-6 md:p-10 rounded-[3rem] rounded-tr-xl shadow-[0_30px_60px_-15px_rgba(26,32,44,0.35)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight";
+    content.className = "bg-slate-900 text-white px-6 py-4 md:px-10 md:py-6 rounded-[2.5rem] rounded-tr-lg shadow-[0_30px_60px_-15px_rgba(15,23,42,0.4)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight border border-white/10";
   } else {
-    content.className =
-      "bg-white text-slate-800 p-6 md:p-10 rounded-[3rem] rounded-tl-xl border border-slate-50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight";
+    content.className = "bg-white text-slate-800 px-6 py-4 md:px-10 md:py-6 rounded-[2.5rem] rounded-tl-lg border border-slate-50 shadow-[0_25px_50px_-20px_rgba(0,0,0,0.06)] max-w-[85%] lg:max-w-[75%] text-base md:text-[17px] whitespace-pre-wrap leading-[1.8] font-medium tracking-tight";
   }
   content.innerText = text;
   inner.appendChild(avatar);
