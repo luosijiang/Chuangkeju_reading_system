@@ -14,7 +14,7 @@ document.addEventListener("gesturestart", function (event) {
 
 // ================= 配置区 =================
 const DIFY_API_KEY = "app-FIpRN8ln822KtJ3k0Gb3578M";
-const DIFY_API_URL = "https://567809b6.r31.cpolar.top/v1";
+const DIFY_API_URL = "https://52053e5.r31.cpolar.top/v1";
 const USERS = { abee: "123456", guest: "888888" };
 const OPENING_STATEMENT =
   "你好！我是你的书籍掌握助手。很高兴能陪你一起开启这段读书之旅。";
